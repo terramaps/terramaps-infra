@@ -17,9 +17,9 @@ terraform {
 
 provider "aws" {
   region              = "us-east-1"
-  allowed_account_ids = ["140547087951"]
+  allowed_account_ids = ["336519019521"]
   assume_role {
-    role_arn = "arn:aws:iam::140547087951:role/github/deploy_role"
+    role_arn = "arn:aws:iam::336519019521:role/github/deploy_role"
   }
   default_tags {
     tags = {
