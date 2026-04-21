@@ -10,6 +10,6 @@ locals {
 
   # All AWS account IDs where deployments can pull ECR images.
   aws_workspaces = [
-    "140547087951"
+    "336519019521"
   ]
 }
