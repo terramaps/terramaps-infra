@@ -1,0 +1,20 @@
+name: Terraform deploy (on commit)
+permissions:
+  id-token: write
+  contents: read
+on:
+  push:
+    branches:
+      - main
+jobs:
+  setup:
+    uses: ./.github/workflows/changes.yml
+  deploy:
+    needs: [setup]
+    if: needs.setup.outputs.changes != '[]'
+    strategy:
+      matrix:
+        infra: ${{ fromJSON(needs.setup.outputs.changes) }}
+    uses: ./.github/workflows/terraform-deploy.yml
+    with:
+      infra: ${{ matrix.infra }}

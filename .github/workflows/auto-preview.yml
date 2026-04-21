@@ -1,0 +1,21 @@
+name: Terraform preview (on pull request)
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: read
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  setup:
+    uses: ./.github/workflows/changes.yml
+  preview:
+    needs: [setup]
+    if: needs.setup.outputs.changes != '[]'
+    strategy:
+      matrix:
+        infra: ${{ fromJSON(needs.setup.outputs.changes) }}
+    uses: ./.github/workflows/terraform-preview.yml
+    with:
+      infra: ${{ matrix.infra }}

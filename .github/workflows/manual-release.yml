@@ -1,0 +1,69 @@
+name: Start a release
+on:
+  repository_dispatch:
+    types: [start-release]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Image tag to deploy'
+        required: true
+      environment:
+        description: 'Target environment (must be dev or prod)'
+        required: true
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  update-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Setup Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+      - name: Set tag and environment variables
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            TAG="${{ github.event.client_payload.tag }}"
+            ENV="${{ github.event.client_payload.environment }}"
+          else
+            TAG=${{ github.event.inputs.tag }}
+            ENV=${{ github.event.inputs.environment }}
+          fi
+          if [ -z "$TAG" ] || [ -z "$ENV" ]; then
+            echo "Error: Missing 'tag' or 'environment'"
+            exit 1
+          fi
+          if [[ "$ENV" != "prod" && "$ENV" != "dev" ]]; then
+            echo "Error: Invalid environment '$ENV'. Must be one of: prod, dev."
+            exit 1
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "env=$ENV" >> $GITHUB_OUTPUT
+      - name: Update image tag
+        run: |
+          FILE="./infra/terramaps/${{ steps.vars.outputs.env }}/${{ steps.vars.outputs.env }}.auto.tfvars"
+          TAG="${{ steps.vars.outputs.tag }}"
+          echo "Updating $FILE to use image tag $TAG"
+          sed -i 's/^image-version = ".*"/image-version = "'"$TAG"'"/' "$FILE"
+      - name: Commit changes
+        run: |
+          BRANCH="release/${{ steps.vars.outputs.env }}-${{ steps.vars.outputs.tag }}"
+          git checkout -b $BRANCH
+          git add .
+          git commit -m "Update image tag to ${{ steps.vars.outputs.tag }} for ${{ steps.vars.outputs.env }}"
+          git push origin HEAD
+      - name: Create PR
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Update image tag
+          title: "Release ${{ steps.vars.outputs.tag }} to ${{ steps.vars.outputs.env }}"
+          body: |
+            This PR updates the image tag to `${{ steps.vars.outputs.tag }}` in the `${{ steps.vars.outputs.env }}` environment.
+          branch: "release/${{ steps.vars.outputs.env }}-${{ steps.vars.outputs.tag }}"
+          base: main

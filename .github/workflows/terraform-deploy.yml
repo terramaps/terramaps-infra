@@ -1,0 +1,26 @@
+name: Deploy a terraform stack
+run-name: Deploy ${{ inputs.infra }} terraform infra
+permissions:
+  id-token: write
+  contents: read
+on:
+  workflow_call:
+    inputs:
+      infra:
+        type: string
+        description: Infrastructure directory to deploy
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authenticate with IAM
+        uses: ./.github/actions/iam-auth
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: Apply terraform
+        run: |
+          terraform -chdir=${{ inputs.infra }} init
+          terraform -chdir=${{ inputs.infra }} apply -auto-approve

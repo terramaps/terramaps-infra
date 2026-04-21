@@ -1,0 +1,34 @@
+name: Manually trigger terraform
+permissions:
+  id-token: write
+  contents: read
+on:
+  workflow_dispatch:
+    inputs:
+      infra:
+        type: choice
+        description: Infrastructure directory to deploy or preview
+        required: true
+        options:
+          - "accounts/organization"
+          - "accounts/dev"
+          - "accounts/prod"
+          - "terramaps/dev"
+          - "terramaps/prod"
+      preview:
+        type: boolean
+        description: Trigger preview only (plan without apply).
+        required: true
+        default: true
+run-name: ${{ inputs.preview == true && format('Preview {0} on branch {1}', inputs.infra, github.ref_name) || format('Deploy {0}', inputs.infra) }}
+jobs:
+  deploy:
+    if: inputs.preview == false && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/terraform-deploy.yml
+    with:
+      infra: ./infra/${{ inputs.infra }}
+  preview:
+    if: inputs.preview == true
+    uses: ./.github/workflows/terraform-preview.yml
+    with:
+      infra: ./infra/${{ inputs.infra }}

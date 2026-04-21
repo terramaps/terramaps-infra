@@ -1,0 +1,30 @@
+name: Check for terraform changes
+on:
+  workflow_call:
+    outputs:
+      changes:
+        value: ${{ jobs.changes.outputs.changes }}
+
+jobs:
+  changes:
+    outputs:
+      changes: ${{ steps.changes.outputs.changes }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            infra/accounts/organization/:
+              - 'infra/accounts/organization/**'
+            infra/accounts/dev/:
+              - 'infra/accounts/dev/**'
+            infra/accounts/prod/:
+              - 'infra/accounts/prod/**'
+            infra/terramaps/dev/:
+              - 'infra/terramaps/dev/**'
+            infra/terramaps/prod/:
+              - 'infra/terramaps/prod/**'
+      - run: |
+          echo ${{ steps.changes.outputs.changes }}

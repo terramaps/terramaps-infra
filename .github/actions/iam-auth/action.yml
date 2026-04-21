@@ -1,0 +1,34 @@
+name: Authenticate with IAM
+description: Authenticate using OIDC and role-chaining for IAM in Terramaps
+inputs:
+  role-arn:
+    description: Role ARN to assume after initial OIDC auth. If empty, stops after the github_actions_role.
+    required: false
+    default: ""
+runs:
+  using: "composite"
+  steps:
+    # Step 1: Assume the OIDC bootstrap role (trusted by the GitHub OIDC provider)
+    - name: Assume OIDC provider role
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::686519988262:role/github-oidc-provider-aws
+        aws-region: us-east-1
+
+    # Step 2: Chain into the shared GitHub Actions role
+    - name: Assume github_actions_role
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::686519988262:role/github/github_actions_role
+        aws-region: us-east-1
+        role-chaining: true
+
+    # Step 3 (optional): Chain into a per-environment deploy role
+    - name: Assume ${{ inputs.role-arn }}
+      uses: aws-actions/configure-aws-credentials@v4
+      if: inputs.role-arn != ''
+      with:
+        role-to-assume: ${{ inputs.role-arn }}
+        aws-region: us-east-1
+        role-chaining: true
+        role-skip-session-tagging: true
