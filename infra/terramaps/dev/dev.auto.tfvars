@@ -1,6 +1,6 @@
 aws-provider = {
-  id          = 140547087951                                        # TODO: AWS account ID for dev deployment
-  assume-role = "arn:aws:iam::140547087951:role/github/deploy_role" # TODO
+  id          = 336519019521
+  assume-role = "arn:aws:iam::336519019521:role/github/deploy_role"
 }
 
 stack = "dev"
@@ -37,7 +37,7 @@ backend-configuration = {
   secret-env-vars = [
     {
       name      = "JWT_SECRET"
-      valueFrom = "arn:aws:ssm:us-east-1:140547087951:parameter/terramaps-dev/secrets/jwt/secret"
+      valueFrom = "arn:aws:ssm:us-east-1:336519019521:parameter/terramaps-dev/secrets/jwt/secret"
     },
   ]
 }
