@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate with IAM
-        uses: ./.github/actions/iam-auth
+        uses: terramaps/terramaps-infra/.github/actions/iam-auth@main
       - name: Checkout
         uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
