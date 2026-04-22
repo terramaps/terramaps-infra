@@ -20,7 +20,8 @@ resource "aws_acm_certificate" "api" {
 
 # Validate certs
 resource "aws_acm_certificate_validation" "app" {
-  certificate_arn = aws_acm_certificate.app.arn
+  certificate_arn         = aws_acm_certificate.app.arn
+  validation_record_fqdns = [for record in aws_route53_record.app-validation : record.fqdn]
 }
 resource "aws_route53_record" "app-validation" {
   for_each = {
@@ -39,7 +40,8 @@ resource "aws_route53_record" "app-validation" {
 }
 
 resource "aws_acm_certificate_validation" "api" {
-  certificate_arn = aws_acm_certificate.api.arn
+  certificate_arn         = aws_acm_certificate.api.arn
+  validation_record_fqdns = [for record in aws_route53_record.api-validation : record.fqdn]
 }
 resource "aws_route53_record" "api-validation" {
   for_each = {
@@ -131,7 +133,7 @@ resource "aws_alb_listener" "https" {
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  certificate_arn   = aws_acm_certificate.app.arn
+  certificate_arn   = aws_acm_certificate_validation.app.certificate_arn
   default_action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.app.arn

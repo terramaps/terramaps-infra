@@ -14,7 +14,7 @@ rds-configuration = {
   allocated-storage = 40
 }
 
-amazonmq-instance-type = "mq.t3.micro"
+amazonmq-instance-type = "mq.m5.large"
 
 image-version = "latest"
 

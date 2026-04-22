@@ -79,7 +79,8 @@ resource "aws_iam_policy" "s3_secrets_read_policy" {
 }
 
 resource "aws_s3_bucket_policy" "main" {
-  bucket = aws_s3_bucket.main.id
+  bucket     = aws_s3_bucket.main.id
+  depends_on = [aws_s3_bucket_public_access_block.main]
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
