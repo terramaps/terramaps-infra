@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "gh_actions_trust" {
     ]
     principals {
       type        = "AWS"
-      identifiers = ["*"]
+      identifiers = ["arn:aws:iam::686519988262:root"]
     }
   }
 }
