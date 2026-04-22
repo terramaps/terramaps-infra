@@ -18,7 +18,7 @@ amazonmq-instance-type = "mq.m5.large"
 
 image-version = "latest"
 
-use-migration-secrets = true
+use-migration-secrets = false
 
 app-configuration = {
   cpu      = 256
