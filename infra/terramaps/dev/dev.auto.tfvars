@@ -45,15 +45,15 @@ backend-configuration = {
 }
 
 api-configuration = {
-  cpu          = 512
-  memory       = 1024
+  cpu          = 2048
+  memory       = 4096
   replicas     = 1
   max-replicas = 1
 }
 
 worker-configuration = {
-  cpu          = 512
-  memory       = 1024
+  cpu          = 2048
+  memory       = 4096
   replicas     = 1
-  max-replicas = 2
+  max-replicas = 1
 }
