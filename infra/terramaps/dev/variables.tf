@@ -47,6 +47,13 @@ variable "run-manual-migrations" {
   default     = false
 }
 
+### Migration secrets
+variable "use-migration-secrets" {
+  description = "When set to true, the migrations container will sync secrets from S3 before running."
+  type        = bool
+  default     = false
+}
+
 ### Long migration timeout
 variable "long-migration-timeout" {
   description = "When set to true, the migrations container start_timeout is set to 1 day (86400s) instead of the default 1200s."

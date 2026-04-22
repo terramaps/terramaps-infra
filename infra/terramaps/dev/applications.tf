@@ -181,9 +181,11 @@ module "service_api" {
       environment              = concat(local.backend-env-vars, [{ name = "ALEMBIC_CONFIG", value = "./src/migrations/alembic.ini" }])
       secrets                  = local.backend-secret-env-vars
       start_timeout            = (var.run-manual-migrations || var.long-migration-timeout) ? 86400 : 1200
-      entrypoint               = ["/bin/sh", "-c"]
-      command                  = ["/app/.venv/bin/aws s3 sync s3://$S3_BUCKET/secrets/ /app/src/migrations/data/secret/ && exec /app/.venv/bin/alembic upgrade head"]
       },
+      var.use-migration-secrets ? {
+        entrypoint = ["/bin/sh", "-c"]
+        command    = ["/app/.venv/bin/aws s3 sync s3://$S3_BUCKET/secrets/ /app/src/migrations/data/secret/ && exec /app/.venv/bin/alembic upgrade head"]
+      } : {},
       # If run-manual-migrations is true, we sleep forever (until ECS times us out)
       # while we can manually exec into the container to run migrations in a custom fashion.
       # Once the manual migration is done, `touch /tmp/done` in the container to signal success.

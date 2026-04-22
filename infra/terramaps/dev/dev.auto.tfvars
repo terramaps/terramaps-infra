@@ -18,6 +18,8 @@ amazonmq-instance-type = "mq.m5.large"
 
 image-version = "latest"
 
+use-migration-secrets = true
+
 app-configuration = {
   cpu      = 256
   memory   = 512
@@ -43,8 +45,8 @@ backend-configuration = {
 }
 
 api-configuration = {
-  cpu          = 256
-  memory       = 512
+  cpu          = 512
+  memory       = 1024
   replicas     = 1
   max-replicas = 1
 }
