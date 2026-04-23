@@ -1,11 +1,5 @@
 locals {
-  deployment  = "terramaps-${var.stack}"
-  domain_name = "${var.subdomains.app}.terramaps.us"
-  api_domain_name = (
-    var.subdomains.api != null && var.subdomains.api != ""
-    ? "${var.subdomains.api}.terramaps.us"
-    : "api-${var.subdomains.app}.terramaps.us"
-  ) # either {subdomain.api}.terramaps.us or api-{subdomain.app}.terramaps.us
+  deployment = "terramaps-${var.stack}"
 }
 
 provider "aws" {

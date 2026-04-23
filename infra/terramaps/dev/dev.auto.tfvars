@@ -5,24 +5,25 @@ aws-provider = {
 
 stack = "dev"
 
-subdomains = {
-  app = "demo" # demo.terramaps.us / api-demo.terramaps.us
+domains = {
+  app = "demo.terramaps.us"
+  api = "api-demo.terramaps.us"
 }
 
 rds-configuration = {
-  instance-type     = "db.t4g.micro"
-  allocated-storage = 40
+  instance-type     = "m6g.xlarge"
+  allocated-storage = 100
 }
 
-amazonmq-instance-type = "mq.m5.large"
+amazonmq-instance-type = "mq.m5.medium"
 
 image-version = "latest"
 
 use-migration-secrets = false
 
 app-configuration = {
-  cpu      = 256
-  memory   = 512
+  cpu      = 1024
+  memory   = 2048
   replicas = 1
   env-vars = [
     { name = "API_BASE_URL", value = "https://api-demo.terramaps.us" },
@@ -47,8 +48,8 @@ backend-configuration = {
 api-configuration = {
   cpu          = 2048
   memory       = 4096
-  replicas     = 1
-  max-replicas = 1
+  replicas     = 2
+  max-replicas = 2
 }
 
 worker-configuration = {
