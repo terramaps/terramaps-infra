@@ -28,7 +28,7 @@ locals {
     },
     {
       name  = "CORS_ALLOWED_ORIGINS"
-      value = "[\"https://${local.domain_name}\"]"
+      value = "[\"https://${var.domains.app}\"]"
     },
     {
       name  = "S3_BUCKET"

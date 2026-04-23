@@ -22,12 +22,12 @@ variable "aws-region" {
   default     = "us-east-1"
 }
 
-# Route 53 configuration
-variable "subdomains" {
-  description = "Sub domain name. e.g. app will be app.terramaps.us."
+# Domain names managed by the accounts/dev hosted zones
+variable "domains" {
+  description = "Fully-qualified domain names for each service."
   type = object({
     app = string
-    api = optional(string)
+    api = string
   })
   nullable = false
 }

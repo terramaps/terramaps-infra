@@ -5,8 +5,9 @@ aws-provider = {
 
 stack = "dev"
 
-subdomains = {
-  app = "demo" # demo.terramaps.us / api-demo.terramaps.us
+domains = {
+  app = "demo.terramaps.us"
+  api = "api-demo.terramaps.us"
 }
 
 rds-configuration = {
