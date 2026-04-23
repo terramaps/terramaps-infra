@@ -11,11 +11,11 @@ domains = {
 }
 
 rds-configuration = {
-  instance-type     = "m6g.xlarge"
+  instance-type     = "db.m6g.xlarge"
   allocated-storage = 100
 }
 
-amazonmq-instance-type = "mq.m5.medium"
+amazonmq-instance-type = "mq.m7g.medium"
 
 image-version = "latest"
 
