@@ -277,10 +277,10 @@ module "service_worker" {
       ]
       health_check = {
         command      = ["CMD-SHELL", "/app/.venv/bin/celery inspect ping -d worker@$HOSTNAME"]
-        interval     = 30
-        timeout      = 10
+        interval     = 60
+        timeout      = 30
         retries      = 3
-        start_period = 15
+        start_period = 60
       }
     }
   ]

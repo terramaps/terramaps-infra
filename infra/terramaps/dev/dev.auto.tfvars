@@ -19,7 +19,7 @@ amazonmq-instance-type = "mq.m7g.medium"
 
 image-version = "latest"
 
-use-migration-secrets = true
+use-migration-secrets = false
 
 app-configuration = {
   cpu      = 1024
