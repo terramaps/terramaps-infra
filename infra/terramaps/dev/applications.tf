@@ -214,6 +214,13 @@ module "service_api" {
         containerName = "migrations"
         condition     = "SUCCESS"
       }]
+      health_check = {
+        command      = ["CMD-SHELL", "/app/.venv/bin/python -c 'import urllib.request,sys; sys.exit(0 if urllib.request.urlopen(\"http://localhost:8000/heartbeat\", timeout=3).status == 200 else 1)'"]
+        interval     = 30
+        timeout      = 5
+        retries      = 3
+        start_period = 30
+      }
     }
   ]
 }
