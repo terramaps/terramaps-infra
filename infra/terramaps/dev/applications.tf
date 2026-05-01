@@ -204,6 +204,7 @@ module "service_api" {
       readonly_root_filesystem = false
       environment              = local.backend-env-vars
       secrets                  = local.backend-secret-env-vars
+      command                  = ["--workers", tostring(max(1, floor(var.api-configuration.cpu / 1024 * 2)))]
       port_mappings = [
         {
           containerPort = 8000
