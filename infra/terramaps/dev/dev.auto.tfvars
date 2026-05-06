@@ -11,7 +11,7 @@ domains = {
 }
 
 rds-configuration = {
-  instance-type     = "db.m6g.xlarge"
+  instance-type     = "db.t3.medium"
   allocated-storage = 100
 }
 
@@ -22,8 +22,8 @@ image-version = "latest"
 use-migration-secrets = false
 
 app-configuration = {
-  cpu      = 1024
-  memory   = 2048
+  cpu      = 512
+  memory   = 1024
   replicas = 1
   env-vars = [
     { name = "API_BASE_URL", value = "https://api-demo.terramaps.us" },
@@ -46,15 +46,15 @@ backend-configuration = {
 }
 
 api-configuration = {
-  cpu          = 2048
-  memory       = 4096
+  cpu          = 1024
+  memory       = 2048
   replicas     = 2
   max-replicas = 2
 }
 
 worker-configuration = {
-  cpu          = 2048
-  memory       = 4096
+  cpu          = 1024
+  memory       = 2048
   replicas     = 1
   max-replicas = 1
 }
